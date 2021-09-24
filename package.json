@@ -7,35 +7,21 @@
   "author": "wuxudongxd",
   "license": "MIT",
   "scripts": {
-    "prepare": "husky install",
+    "pre-commit": "lint-staged",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
-    "lint": "npm run lint:eslint && npm run lint:stylelint && npm run lint:prettier",
+    "lint": "npm run lint:eslint && npm run lint:stylelint && npm run format:prettier",
     "lint:eslint": "eslint -c .eslintrc.js --ext .ts,.tsx,.js src --fix",
     "lint:stylelint": "stylelint --config .stylelintrc.js src/**/*.{less,css,scss} --fix",
-    "lint:prettier": "prettier --write **/*.{ts,tsx,js,json,html,yml,css,less,scss,md}"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.{ts,tsx,js}": [
-      "eslint --config .eslintrc.js"
-    ],
-    "*.{css,less,scss}": [
-      "stylelint --config .stylelintrc.js"
-    ],
-    "*.{ts,tsx,js,json,html,yml,css,less,scss,md}": [
-      "prettier --write"
-    ]
+    "format:prettier": "prettier --write **/*.{ts,tsx,js,json,html,yml,css,less,scss,md}"
   },
   "devDependencies": {
     "@commitlint/cli": "^13.1.0",
     "@commitlint/config-conventional": "^13.1.0",
     "@typescript-eslint/eslint-plugin": "^4.31.2",
     "@typescript-eslint/parser": "^4.31.2",
+    "commitizen": "^4.2.4",
     "conventional-changelog-cli": "^2.1.1",
+    "cz-conventional-changelog": "^3.3.0",
     "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-prettier": "^8.3.0",
@@ -43,7 +29,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-unicorn": "^36.0.0",
-    "husky": "^7.0.0",
+    "husky": "^7.0.2",
     "lint-staged": "^11.1.2",
     "prettier": "^2.4.1",
     "stylelint": "^13.13.1",
