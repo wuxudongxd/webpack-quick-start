@@ -8,7 +8,6 @@ module.exports = {
     'airbnb-base',
     'plugin:unicorn/recommended',
     'plugin:promise/recommended',
-    'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
   ],
   parserOptions: {
@@ -17,6 +16,7 @@ module.exports = {
   },
   rules: {
     'unicorn/prefer-module': 'off',
+    'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
   },
   settings: {
     'import/resolver': {
@@ -26,4 +26,15 @@ module.exports = {
       typescript: {},
     },
   },
+  overrides: [
+    {
+      files: ['*.ts', '*.tsx'],
+      parser: '@typescript-eslint/parser',
+      plugins: ['@typescript-eslint'],
+      extends: [
+        'plugin:@typescript-eslint/recommended',
+        'plugin:@typescript-eslint/recommended-requiring-type-checking',
+      ],
+    },
+  ],
 };
