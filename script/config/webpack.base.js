@@ -1,6 +1,8 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const { appIndex, appHtml } = require('../paths');
+const CopyPlugin = require('copy-webpack-plugin');
+const WebpackBar = require('webpackbar');
+const paths = require('../paths');
 const { isDevelopment, isProduction } = require('../environment');
 const { imageInlineSizeLimit } = require('../config');
 
@@ -37,7 +39,15 @@ const getCssLoaders = () => [
 
 module.exports = {
   entry: {
-    app: appIndex,
+    app: paths.appIndex,
+  },
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js', '.json'],
+    alias: {
+      Src: paths.appSrc,
+      Components: paths.appSrcComponents,
+      Utils: paths.appSrcUtils,
+    },
   },
   module: {
     rules: [
@@ -58,6 +68,12 @@ module.exports = {
         ],
       },
       {
+        test: /\.(tsx?|jsx?)$/,
+        loader: 'babel-loader',
+        options: { cacheDirectory: true },
+        exclude: /node_modules/,
+      },
+      {
         test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
         type: 'asset',
         parser: {
@@ -74,9 +90,28 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: appHtml,
+      template: paths.appHtml,
       cache: true,
     }),
     new MiniCssExtractPlugin(),
+    new CopyPlugin({
+      patterns: [
+        {
+          context: paths.appPublic,
+          from: '*',
+          to: paths.appBuild,
+          toType: 'dir',
+          globOptions: {
+            dot: true,
+            gitignore: true,
+            ignore: ['**/index.html'],
+          },
+        },
+      ],
+    }),
+    new WebpackBar({
+      name: isDevelopment ? 'RUNNING' : 'BUNDLING',
+      color: isDevelopment ? '#52c41a' : '#722ed1',
+    }),
   ],
 };
