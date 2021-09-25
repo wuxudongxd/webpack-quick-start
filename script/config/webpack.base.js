@@ -1,6 +1,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const WebpackBar = require('webpackbar');
 const paths = require('../paths');
 const { isDevelopment, isProduction } = require('../environment');
@@ -40,6 +41,12 @@ const getCssLoaders = () => [
 module.exports = {
   entry: {
     app: paths.appIndex,
+  },
+  cache: {
+    type: 'filesystem',
+    buildDependencies: {
+      config: [__filename],
+    },
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js', '.json'],
@@ -93,7 +100,6 @@ module.exports = {
       template: paths.appHtml,
       cache: true,
     }),
-    new MiniCssExtractPlugin(),
     new CopyPlugin({
       patterns: [
         {
@@ -113,5 +119,16 @@ module.exports = {
       name: isDevelopment ? 'RUNNING' : 'BUNDLING',
       color: isDevelopment ? '#52c41a' : '#722ed1',
     }),
+    new ForkTsCheckerWebpackPlugin({
+      typescript: {
+        configFile: paths.appTsConfig,
+      },
+    }),
+    isProduction &&
+      new MiniCssExtractPlugin({
+        filename: 'css/[name].[contenthash:8].css',
+        chunkFilename: 'css/[name].[contenthash:8].css',
+        ignoreOrder: false,
+      }),
   ],
 };
