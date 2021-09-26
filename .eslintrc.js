@@ -6,7 +6,6 @@ module.exports = {
   },
   extends: [
     'airbnb-base',
-    'plugin:unicorn/recommended',
     'plugin:promise/recommended',
     'plugin:prettier/recommended',
   ],
@@ -24,7 +23,6 @@ module.exports = {
         js: 'never',
       },
     ],
-    'unicorn/prefer-module': 'off',
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
   },
   overrides: [
