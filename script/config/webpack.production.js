@@ -38,6 +38,7 @@ module.exports = merge(baseConfig, {
     minimize: true,
     minimizer: [
       new TerserPlugin({
+        parallel: 4,
         extractComments: false,
         terserOptions: {
           compress: { pure_funcs: ['console.log'] },
